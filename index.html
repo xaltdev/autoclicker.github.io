@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoClicker - Download</title>
+    <!-- Favicon Link -->
+    <link rel="icon" href="icon/icon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-dark': 'linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%)',
+                        'gradient-light': 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #f8fafc 100%)',
+                        'gradient-purple': 'linear-gradient(135deg, #a855f7, #ec4899)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-effect {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .glass-card {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Custom select styling */
+        .glass-select {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+        }
+
+        .glass-select option {
+            background: rgba(15, 23, 42, 0.95) !important;
+            color: white !important;
+            padding: 8px !important;
+            border: none !important;
+        }
+
+        .glass-select:focus {
+            outline: none !important;
+            ring: 2px solid rgb(168, 85, 247) !important;
+            border-color: transparent !important;
+        }
+
+        /* Theme transitions */
+        body {
+            transition: background-image 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-light {
+            background-image: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 50%, #f8fafc 100%) !important;
+        }
+
+        .theme-light .glass-effect,
+        .theme-light .glass-card {
+            background: rgba(0, 0, 0, 0.05) !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .theme-light .text-white {
+            color: #1f2937 !important;
+        }
+
+        .theme-light .text-white\/80 {
+            color: #4b5563 !important;
+        }
+
+        .theme-light .text-white\/70 {
+            color: #6b7280 !important;
+        }
+
+        .theme-light .text-white\/60 {
+            color: #9ca3af !important;
+        }
+
+        .theme-light .glass-select {
+            background: rgba(0, 0, 0, 0.1) !important;
+            color: #1f2937 !important;
+            border-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .theme-light .glass-select option {
+            background: rgba(248, 250, 252, 0.95) !important;
+            color: #1f2937 !important;
+        }
+
+        .theme-light .bg-gray-500 { /* Style for disabled buttons in light mode */
+            background-color: #d1d5db !important; /* Lighter gray for light theme */
+        }
+        .theme-light .text-white\/70.opacity-60 { /* Ensure disabled button text is dark enough in light mode */
+             color: #4b5563 !important;
+             opacity: 0.7 !important;
+        }
+
+
+        /* Performance optimizations */
+        * {
+            box-sizing: border-box;
+        }
+
+        .transition-optimized {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            will-change: transform;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="font-inter min-h-screen bg-gradient-dark transition-all duration-300" data-theme="dark">
+    <!-- Topbar -->
+    <header class="sticky top-0 z-50 w-full border-b border-white/10 bg-black/20 glass-effect">
+        <div class="container mx-auto px-4">
+            <div class="flex h-16 items-center justify-between">
+                <!-- Left Icon -->
+		<div class="flex items-center space-x-2">
+    			<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-purple">
+       				 <!-- ICO File Icon -->
+       			 	<img src="icon/icon.ico" alt="App Icon" class="h-5 w-5" />
+   			 </div>
+  		  	<span class="text-xl font-bold text-white">AutoClicker</span>
+		</div>
+
+                <!-- Right Navigation -->
+                <div class="flex items-center space-x-6">
+                    <nav class="hidden md:flex items-center space-x-6">
+                        <button class="nav-link text-sm font-medium text-purple-300 transition-colors hover:text-purple-200" data-section="downloads">
+                            Downloads
+                        </button>
+                        <button class="nav-link text-sm font-medium text-white/80 transition-colors hover:text-purple-300" data-section="about">
+                            About
+                        </button>
+                        <!-- Source Code Button -->
+                        <a href="https://github.com/xaltdev/AutoClicker" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-white/80 transition-colors hover:text-purple-300">
+                           Source Code
+                        </a>
+                    </nav>
+
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="h-9 w-9 rounded-md text-white hover:bg-white/10 transition-colors flex items-center justify-center">
+                        <svg class="sun-icon h-4 w-4 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                        </svg>
+                        <svg class="moon-icon h-4 w-4 absolute transition-all duration-300 opacity-0 rotate-90 scale-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        <!-- Downloads Section -->
+        <section id="downloads-section" class="content-section">
+            <!-- Hero Section -->
+            <div class="text-center space-y-4 mb-12">
+                <h1 class="text-4xl md:text-6xl font-bold text-white">
+                    Download
+                    <span class="bg-gradient-purple bg-clip-text text-transparent"> AutoClicker</span>
+                </h1>
+                <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                    Get the latest version of our simple, fast, free, and open-source autoclicker — currently available for Windows.
+                </p>
+            </div>
+
+            <!-- Download Card -->
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white/5 border border-white/10 rounded-xl glass-card hover:bg-white/10 transition-optimized hover:-translate-y-1">
+                    <div class="p-8">
+                        <!-- Header -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-purple">
+                                     <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">AutoClicker App</h3>
+                                    <p class="text-white/70">Automate your clicks effortlessly</p>
+                                </div>
+                            </div>
+                            <span id="currentVersionBadge" class="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full text-sm font-medium">
+                                v1.0.0
+                            </span>
+                        </div>
+
+                        <!-- Version Selector -->
+                        <div class="mb-6">
+                            <label for="versionSelect" class="block text-sm font-medium text-white/80 mb-2">
+                                Select Version (Windows)
+                            </label>
+                            <select id="versionSelect" class="w-full glass-select rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                                <option value="1.0.0" data-size="14" data-date="2024-07-26">v1.0.0 (Initial Release) - July 26, 2024</option>
+                                <!-- Add future versions here -->
+                            </select>
+                        </div>
+
+                        <!-- Download Info -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="text-center p-4 bg-white/5 rounded-lg border border-white/10">
+                                <div class="text-2xl font-bold text-white" id="fileSize">14 MB</div>
+                                <div class="text-sm text-white/60">File Size</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 rounded-lg border border-white/10">
+                                <div class="text-2xl font-bold text-white" id="releaseDate">May 30, 2025</div>
+                                <div class="text-sm text-white/60">Release Date</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 rounded-lg border border-white/10">
+                                <div class="text-2xl font-bold text-white">1 Platform</div>
+                                <div class="text-sm text-white/60">Currently</div>
+                            </div>
+                        </div>
+
+                        <!-- Platform Badges -->
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="border border-white/20 text-white/80 px-3 py-1 rounded-full text-sm font-medium">
+                                Windows 10+
+                            </span>
+                             <span class="border border-gray-500 text-gray-400 px-3 py-1 rounded-full text-sm font-medium opacity-70">
+                                macOS (soon)
+                            </span>
+                             <span class="border border-gray-500 text-gray-400 px-3 py-1 rounded-full text-sm font-medium opacity-70">
+                                Linux (soon)
+                            </span>
+                        </div>
+
+                        <!-- Download Buttons -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <button class="download-btn ripple-effect flex items-center justify-center gap-2 bg-gradient-purple hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 px-4 rounded-lg transition-optimized hover:-translate-y-0.5" data-platform="windows">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                                </svg>
+                                Windows (.exe)
+                            </button>
+                            <button class="flex items-center justify-center bg-gray-500 text-white/70 font-medium py-3 px-4 rounded-lg opacity-60 cursor-not-allowed" disabled>
+                                macOS (coming soon...)
+                            </button>
+                            <button class="flex items-center justify-center bg-gray-500 text-white/70 font-medium py-3 px-4 rounded-lg opacity-60 cursor-not-allowed" disabled>
+                                Linux (coming soon...)
+                            </button>
+                        </div>
+
+                        <!-- Release Notes -->
+                        <div class="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
+                            <h4 class="font-semibold text-white mb-2">Release Notes (v1.0.0)</h4>
+                            <div id="releaseNotes" class="text-sm text-white/70 space-y-1">
+                                <p>• Initial release of AutoClicker</p>
+                                <p>• Core auto-clicking functionality</p>
+                                <p>• Configurable click intervals</p>
+                                <p>• Start and stop with a configurable hotkey</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Requirements -->
+            <div class="text-center space-y-4 max-w-4xl mx-auto mt-12">
+                <h3 class="text-2xl font-semibold text-white">System Requirements</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 glass-card">
+                        <h4 class="font-medium text-white mb-2">Windows</h4>
+                        <p class="text-sm text-white/70">Windows 10 or later, 128MB RAM, 14MB disk space</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 glass-card opacity-50">
+                        <h4 class="font-medium text-white mb-2">macOS (Coming Soon)</h4>
+                        <p class="text-sm text-white/70">Requirements to be determined.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-6 glass-card opacity-50">
+                        <h4 class="font-medium text-white mb-2">Linux (Coming Soon)</h4>
+                        <p class="text-sm text-white/70">Requirements to be determined.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about-section" class="content-section hidden">
+            <div class="text-center space-y-4 mb-12">
+                <h1 class="text-4xl md:text-6xl font-bold text-white">
+                    About
+                    <span class="bg-gradient-purple bg-clip-text text-transparent"> AutoClicker</span>
+                </h1>
+                 <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                    A lightweight, free, and open-source tool to automate mouse clicks.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white/5 border border-white/10 rounded-xl glass-card">
+                    <div class="p-8 space-y-6">
+                        <div class="space-y-4">
+                            <h2 class="text-2xl font-semibold text-white">What is AutoClicker?</h2>
+                            <p class="text-lg text-white/80 leading-relaxed">
+                                AutoClicker is a simple yet effective tool designed to simulate mouse clicks automatically.
+                                Whether you're playing a game that requires repetitive clicking, performing a task that needs
+                                multiple clicks, or testing software, AutoClicker can save you time and effort. It's built
+                                to be lightweight, easy to use, and completely free.
+                            </p>
+                        </div>
+
+                         <div class="space-y-4">
+                            <h2 class="text-2xl font-semibold text-white">Free & Open Source (FOSS)</h2>
+                            <p class="text-lg text-white/80 leading-relaxed">
+                                We believe in transparency and community collaboration. AutoClicker is Free and Open Source Software (FOSS).
+                                This means you can download it, use it, modify it, and share it freely. We encourage you to check out
+                                our source code, contribute if you can, or report any issues you find.
+                                <br>
+                                <a href="https://github.com/xaltdev/AutoClicker" target="_blank" rel="noopener noreferrer" class="text-purple-300 hover:text-purple-200 underline transition-colors">
+                                   View Source Code on GitHub
+                                </a>
+                            </p>
+                        </div>
+
+
+                        <div class="space-y-4">
+                            <h2 class="text-2xl font-semibold text-white">Key Features</h2>
+                            <ul class="space-y-2 text-lg text-white/80 list-disc list-inside">
+                                <li><strong>Configurable Click Speed:</strong> Set the time interval between clicks.</li>
+                                <li><strong>Simple Interface:</strong> Easy to understand and use, even for beginners.</li>
+                                <li><strong>Start/Stop Control:</strong> Easily start and stop clicking.</li>
+                                <li><strong>Lightweight:</strong> Minimal impact on system performance.</li>
+                                <li><strong>FOSS:</strong> Free to use and open for contributions.</li>
+                                <li><strong>Windows Support:</strong> Currently available for Windows, with more platforms planned.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black/20 glass-effect">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center text-white/60">
+                <p>© 2025 AutoClicker by altdev. Open Source Software.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Version data
+        const versions = {
+            "1.0.0": {
+                size: "14",
+                date: "May 30, 2025",
+                notes: [
+                    "• Initial release of AutoClicker",
+                    "• Core auto-clicking functionality",
+                    "• Configurable click intervals",
+                    "• Start and stop with a configurable hotkey"
+                ]
+            }
+        };
+
+        // Optimized Theme Manager
+        class ThemeManager {
+            constructor() {
+                this.theme = localStorage.getItem('theme') || 'dark';
+                this.body = document.body;
+                this.sunIcon = document.querySelector('.sun-icon');
+                this.moonIcon = document.querySelector('.moon-icon');
+                this.init();
+            }
+
+            init() {
+                this.applyTheme();
+                this.bindEvents();
+            }
+
+            applyTheme() {
+                this.body.setAttribute('data-theme', this.theme);
+                localStorage.setItem('theme', this.theme);
+
+                if (this.theme === 'light') {
+                    this.body.classList.add('theme-light');
+                    this.sunIcon.style.cssText = 'transform: rotate(-90deg) scale(0); opacity: 0;';
+                    this.moonIcon.style.cssText = 'transform: rotate(0deg) scale(1); opacity: 1;';
+                } else {
+                    this.body.classList.remove('theme-light');
+                    this.sunIcon.style.cssText = 'transform: rotate(0deg) scale(1); opacity: 1;';
+                    this.moonIcon.style.cssText = 'transform: rotate(-90deg) scale(0); opacity: 0;';
+                }
+            }
+
+            toggleTheme() {
+                this.theme = this.theme === 'dark' ? 'light' : 'dark';
+                this.applyTheme();
+            }
+
+            bindEvents() {
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+            }
+        }
+
+        // Optimized Navigation Manager
+        class NavigationManager {
+            constructor() {
+                this.activeSection = 'downloads';
+                this.navLinks = document.querySelectorAll('.nav-link');
+                this.sections = document.querySelectorAll('.content-section');
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                 // Ensure correct section is shown on load
+                this.showSection(this.activeSection);
+            }
+
+            bindEvents() {
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        const section = e.target.getAttribute('data-section');
+                        this.setActiveSection(section);
+                    });
+                });
+            }
+
+            setActiveSection(section) {
+                this.navLinks.forEach(link => {
+                    link.classList.remove('text-purple-300', 'font-bold'); // Ensure font-bold is removed if not active
+                    link.classList.add('text-white/80');
+                });
+
+                const activeLink = document.querySelector(`[data-section="${section}"]`);
+                if (activeLink) {
+                    activeLink.classList.remove('text-white/80');
+                    activeLink.classList.add('text-purple-300', 'font-bold'); // Add font-bold to active
+                }
+
+                this.showSection(section);
+                this.activeSection = section;
+            }
+
+            showSection(section) {
+                this.sections.forEach(sec => sec.classList.add('hidden'));
+                const targetSection = document.getElementById(`${section}-section`);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Optimized Version Manager
+        class VersionManager {
+            constructor() {
+                this.currentVersion = "1.0.0"; // Default to the only version
+                this.versionSelect = document.getElementById('versionSelect');
+                this.versionBadge = document.getElementById('currentVersionBadge');
+                this.fileSize = document.getElementById('fileSize');
+                this.releaseDate = document.getElementById('releaseDate');
+                this.releaseNotes = document.getElementById('releaseNotes');
+                this.releaseNotesTitle = document.querySelector('#releaseNotes-section h4'); // Assuming title needs update
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateVersionInfo(); // Initial update
+            }
+
+            bindEvents() {
+                if (this.versionSelect) { // Only bind if selector exists and has options
+                    this.versionSelect.addEventListener('change', (e) => {
+                        this.currentVersion = e.target.value;
+                        this.updateVersionInfo();
+                    });
+                }
+            }
+
+            updateVersionInfo() {
+                const versionData = versions[this.currentVersion];
+                if (!versionData) {
+                    console.error("Version data not found for:", this.currentVersion);
+                    if(this.versionBadge) this.versionBadge.textContent = 'N/A';
+                    if(this.fileSize) this.fileSize.textContent = 'N/A';
+                    if(this.releaseDate) this.releaseDate.textContent = 'N/A';
+                    if(this.releaseNotes) this.releaseNotes.innerHTML = '<p>No release notes available.</p>';
+                    if(document.querySelector('.mt-6 h4')) document.querySelector('.mt-6 h4').textContent = 'Release Notes';
+                    return;
+                }
+
+                if(this.versionBadge) this.versionBadge.textContent = `v${this.currentVersion}`;
+                if(this.fileSize) this.fileSize.textContent = `${versionData.size} MB`;
+                if(this.releaseDate) this.releaseDate.textContent = versionData.date;
+                if(this.releaseNotes) {
+                    this.releaseNotes.innerHTML = versionData.notes.map(note => `<p>${note}</p>`).join('');
+                }
+                const rnTitleElement = document.querySelector('#downloads-section .mt-6 h4');
+                if (rnTitleElement) {
+                    rnTitleElement.textContent = `Release Notes (v${this.currentVersion})`;
+                }
+            }
+        }
+
+        // Optimized Download Manager
+        class DownloadManager {
+            constructor() {
+                this.downloadButtons = document.querySelectorAll('.download-btn'); // Only Windows button will have this
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.downloadButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        this.handleDownload(e);
+                        this.addRippleEffect(e); // Ripple only for active download buttons
+                    });
+                });
+            }
+
+            addRippleEffect(e) {
+                const button = e.currentTarget;
+                const ripple = document.createElement('span');
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                `;
+
+                button.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            }
+
+            handleDownload(e) {
+                const button = e.currentTarget;
+                const platform = button.getAttribute('data-platform');
+                const version = document.getElementById('versionSelect').value;
+                const originalHTML = button.innerHTML;
+
+                if (platform !== "windows") return;
+
+                button.innerHTML = `
+                    <svg class="h-4 w-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6M12 17v6M5.64 5.64l4.24 4.24M14.12 14.12l4.24 4.24M1 12h6M17 12h6M5.64 18.36l4.24-4.24M14.12 9.88l4.24-4.24"></path>
+                    </svg>
+                    Preparing...
+                `;
+                button.disabled = true;
+                button.classList.add('opacity-70', 'cursor-not-allowed');
+
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.href = './download/AutoClicker.exe'; // *** Path to your EXE ***
+                    link.download = 'AutoClicker.exe';       // Suggested filename for user
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    button.innerHTML = `
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Download Started!
+                    `;
+                    this.showDownloadSuccess(platform, version);
+
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.disabled = false;
+                        button.classList.remove('opacity-70', 'cursor-not-allowed');
+                    }, 2500);
+                }, 700);
+            }
+
+            showDownloadSuccess(platform, version) {
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+                notification.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <div>
+                            <div class="font-medium">Download Initiated!</div>
+                            <div class="text-sm opacity-90">AutoClicker v${version} (Windows)</div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(notification);
+
+                requestAnimationFrame(() => {
+                    notification.classList.remove('translate-x-full');
+                });
+
+                setTimeout(() => {
+                    notification.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 300);
+                }, 4000);
+            }
+        }
+
+        // Optimized Animation Manager
+        class AnimationManager {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.observeElements();
+            }
+
+            observeElements() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+
+                const elementsToObserve = document.querySelectorAll('.glass-card, .text-center.space-y-4.mb-12');
+                elementsToObserve.forEach((element, index) => {
+                    element.style.opacity = '0';
+                    element.style.transform = 'translateY(20px)';
+                    element.style.transition = `opacity 0.6s ease ${index * 0.05}s, transform 0.6s ease ${index * 0.05}s`;
+                    observer.observe(element);
+                });
+            }
+        }
+
+        // Initialize all managers when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new NavigationManager();
+            new VersionManager();
+            new DownloadManager();
+            new AnimationManager();
+        });
+    </script>
+</body>
+</html>
